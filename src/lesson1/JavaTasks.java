@@ -2,6 +2,14 @@ package lesson1;
 
 import kotlin.NotImplementedError;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.LinkedList;
+
 @SuppressWarnings("unused")
 public class JavaTasks {
     /**
@@ -34,8 +42,38 @@ public class JavaTasks {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
-    static public void sortTimes(String inputName, String outputName) {
-        throw new NotImplementedError();
+    /**
+     * Трудоёмкость программы T = O(log(n))
+     * Ресурсоёмкость программы R = O(N).
+     * В процессе программы составляется дерево из N элементов.
+     */
+    static public void sortTimes(String inputName, String outputName) throws IOException {
+        /**
+         * Трудоёмкость программы T = O(log(N))
+         * Ресурсоёмкость программы R = O(N).
+         * В процессе программы составляется дерево из N элементов.
+         */
+        BufferedReader inputFile = Files.newBufferedReader(Paths.get(inputName));
+        String line = inputFile.readLine();
+        TimeTree tree = new TimeTree();
+
+        while (line != null) {
+            if (!line.matches("[01]\\d:[012345]\\d:[012345]\\d\\s[AP]M")) {
+                throw new IllegalArgumentException("Wrong input");
+            }
+            String[] time = line.split("\\s");
+            String[] nums = time[0].split(":");
+
+            tree.addNode(nums, time[1]);
+
+            line = inputFile.readLine();
+        }
+
+        BufferedWriter outputFile = Files.newBufferedWriter(Paths.get(outputName));
+
+        tree.sortAndPrint(outputFile);
+
+        outputFile.close();
     }
 
     /**
@@ -64,8 +102,36 @@ public class JavaTasks {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
-    static public void sortAddresses(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortAddresses(String inputName, String outputName) throws IOException {
+        /**
+         * Трудоёмкость программы T = O(log(N))
+         * Ресурсоёмкость программы R = O(N).
+         * В процессе программы составляется дерево из N элементов.
+         */
+        BufferedReader inputFile = Files.newBufferedReader(Paths.get(inputName));
+        String line = inputFile.readLine();
+        AddressTree tree = new AddressTree();
+        String[] splitted;
+        String[] address;
+
+        while (line != null) {
+            if (!line.matches("[А-ЯЁ][а-яё]*\\s[А-ЯЁ][а-яё]*\\s-\\s([А-Я][А-яЁа-яё-]*\\s)+\\d+")) {
+                throw new IllegalArgumentException("Wrong input: " + line);
+            }
+            splitted = line.split("\\s-\\s");
+
+
+            String[] bbbb = splitted[1].split(" ");
+            tree.addNode(splitted[0], splitted[1].split(" "));
+
+            line = inputFile.readLine();
+        }
+
+        BufferedWriter outputFile = Files.newBufferedWriter(Paths.get(outputName));
+
+        tree.sortAndPrint(outputFile);
+
+        outputFile.close();
     }
 
     /**
@@ -150,6 +216,20 @@ public class JavaTasks {
      * Результат: second = [1 3 4 9 9 13 15 20 23 28]
      */
     static <T extends Comparable<T>> void mergeArrays(T[] first, T[] second) {
-        throw new NotImplementedError();
+        /**
+         * Трудоёмкость программы T = O(N)
+         */
+        int indexOne = 0;
+        int indexTwo = first.length;
+        for (int count = 0; count < second.length; count++) {
+            if (indexTwo >= second.length ||
+                    indexOne < first.length && first[indexOne].compareTo(second[indexTwo]) < 0) {
+                second[count] = first[indexOne];
+                indexOne++;
+            } else {
+                second[count] = second[indexTwo];
+                indexTwo++;
+            }
+        }
     }
 }
