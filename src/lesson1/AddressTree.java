@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class AddressTree {
     AddressNode root;
 
-    public int compareNodes(AddressNode newNode, AddressNode currentNode) {
+    private int compareNodes(AddressNode newNode, AddressNode currentNode) {
         if (newNode.address[0].compareTo(currentNode.address[0]) < 0) return -1;
         else if (newNode.address[0].compareTo(currentNode.address[0]) > 0) return 1;
         else if (Integer.parseInt(newNode.address[1]) < Integer.parseInt(currentNode.address[1])) return -1;
@@ -17,6 +17,7 @@ public class AddressTree {
     }
 
     public void addNode(String citizen, String[] address) {
+
         AddressNode newNode = new AddressNode(citizen, address);
 
         if (root == null) {
@@ -29,6 +30,7 @@ public class AddressTree {
 
         while (true) {
             parent = currentNode;
+
             switch (compareNodes(newNode, currentNode)) {
                 case -1 -> {
                     currentNode = parent.leftChild;
@@ -63,25 +65,27 @@ public class AddressTree {
     public void sortAndPrint(BufferedWriter outputFile) throws IOException {
         sortAndPrint(root, outputFile);
     }
-}
 
-class AddressNode {
-    String[] address;
-    String citizen;
-    LinkedList<String> citizens = new LinkedList();
 
-    AddressNode leftChild;
-    AddressNode rightChild;
+    static class AddressNode {
+        String[] address;
+        String citizen;
+        LinkedList<String> citizens = new LinkedList();
 
-    public AddressNode(String citizen, String[] address) {
-        this.address = address;
-        this.citizen = citizen;
-        citizens.add(citizen);
+        AddressNode leftChild;
+        AddressNode rightChild;
+
+        public AddressNode(String citizen, String[] address) {
+            this.address = address;
+            this.citizen = citizen;
+            citizens.add(citizen);
+        }
+
+        @Override
+        public String toString() {
+            Collections.sort(citizens);
+            return address[0] + " " + address[1] + " - " + String.join(", ", citizens) + "\n";
+        }
     }
 
-    @Override
-    public String toString() {
-        Collections.sort(citizens);
-        return address[0] + " " + address[1] + " - " + String.join(", ", citizens) + "\n";
-    }
 }

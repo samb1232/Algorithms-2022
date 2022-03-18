@@ -160,6 +160,7 @@ abstract class AbstractBinarySearchTreeTest {
                     "The tree doesn't have the element $element from the control set."
                 )
             }
+
             println("All clear!")
         }
     }
@@ -203,6 +204,10 @@ abstract class AbstractBinarySearchTreeTest {
             assertFailsWith<NoSuchElementException>("Something was supposedly returned after the elements ended") {
                 binaryIter.next()
             }
+            assertEquals(false, binaryIter.hasNext())
+            assertFailsWith<NoSuchElementException>("Test on throwing exception") {
+                binaryIter.next()
+            }
             println("All clear!")
         }
     }
@@ -227,6 +232,7 @@ abstract class AbstractBinarySearchTreeTest {
                 binarySet += element
             }
             controlSet.remove(toRemove)
+            assertFalse { controlSet.contains(toRemove) } // Checking whether item was deleted form controlSet or not
             println("Control set: $controlSet")
             println("Removing element $toRemove from the tree through the iterator...")
             val iterator = binarySet.iterator()

@@ -26,7 +26,7 @@ abstract class AbstractTaskTests : AbstractFileTests() {
                 """.trimIndent()
             )
         } finally {
-            File("temp.txt").delete()
+//            File("temp.txt").delete()
         }
         try {
             sortTimes("input/time_in2.txt", "temp.txt")
@@ -322,6 +322,27 @@ abstract class AbstractTaskTests : AbstractFileTests() {
         try {
             sortSequence("input/empty.txt", "temp.txt")
             assertFileContent("temp.txt", "")
+        } finally {
+            File("temp.txt").delete()
+        }
+        try {
+            sortSequence("input/temp_in_MYTEST1.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """
+                        -12.6
+                        -12.6
+                        -12.6
+                        -12.6
+                        -12.6
+                        -12.6
+                        12.6
+                        12.6
+                        12.6
+                        12.6
+                        12.6
+                    """.trimIndent()
+            )
         } finally {
             File("temp.txt").delete()
         }

@@ -2,6 +2,7 @@ package lesson3
 
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class BinarySearchTreeTest : AbstractBinarySearchTreeTest() {
 
@@ -30,6 +31,7 @@ class BinarySearchTreeTest : AbstractBinarySearchTreeTest() {
     @Tag("5")
     fun removeTestJava() {
         doRemoveTest()
+        assertEquals(0, BinarySearchTree<Integer>().height()) // Initial test
     }
 
     @Test

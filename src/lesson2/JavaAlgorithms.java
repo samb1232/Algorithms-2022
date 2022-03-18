@@ -123,7 +123,7 @@ public class JavaAlgorithms {
                     if (substring.length() > maxSubstring.length()) {
                         maxSubstring = substring.toString();
                     }
-                    substring = new StringBuilder();
+                    substring.setLength(0);
                 }
             }
         }
