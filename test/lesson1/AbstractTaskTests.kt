@@ -26,7 +26,7 @@ abstract class AbstractTaskTests : AbstractFileTests() {
                 """.trimIndent()
             )
         } finally {
-//            File("temp.txt").delete()
+            File("temp.txt").delete()
         }
         try {
             sortTimes("input/time_in2.txt", "temp.txt")

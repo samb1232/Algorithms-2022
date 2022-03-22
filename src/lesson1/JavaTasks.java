@@ -79,9 +79,11 @@ public class JavaTasks {
     static public void sortAddresses(String inputName, String outputName) throws IOException {
         /**
          * Трудоёмкость программы T = O(N*log(N)).
-         * Сортировка деревом. Объяснения в прошлой программе.
          * Ресурсоёмкость программы R = O(N).
-         * В процессе программы составляется дерево из N элементов.
+         * Сортировка деревом. В процессе программы составляется дерево из N элементов.
+         * Добавление элемента в дерево занимает O(log(N)).
+         * Так как дерево не балансируется, трудоёмкость добавления элемента в дерево в худшем случае будет достигать O(N),
+         * а трудоёмкость всей программы O(N^2).
          */
         try (BufferedReader inputFile = Files.newBufferedReader(Paths.get(inputName));
              BufferedWriter outputFile = Files.newBufferedWriter(Paths.get(outputName))) {
@@ -149,10 +151,13 @@ public class JavaTasks {
      */
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
         /**
-         * Трудоёмкость программы T = O(n^2*log(n))
+         * Трудоёмкость программы T = O(n^3*log(n))
          * Ресурсоёмкость программы R = O(n)
-         * Программа составляет массив из чисел формата Double и сортирует его методом Collection.sort,
-         * в которой используется сортировка слиянием (сложность O(n*log(n)))
+         * Программа составляет массив из чисел формата Double и сортирует его методом Collection.sort.
+         * Трудоёмкость добавления всех температур в массив O(n).
+         * Трудоёмкость сортировки массива методом Collection.sort (сортировка слиянием) O(n*log(n)).
+         * Трудоёмкость вывода элементов в файл O(n).
+         * Общая трудоёмкость программы получается O(n^3*log(n)).
          */
         try (BufferedReader inputFile = Files.newBufferedReader(Paths.get(inputName));
              BufferedWriter outputFile = Files.newBufferedWriter(Paths.get(outputName))) {
@@ -171,10 +176,6 @@ public class JavaTasks {
                 outputFile.newLine();
             }
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-        sortTemperatures("input/temp_in_MYTEST1.txt", "temp.txt");
     }
 
         /**
@@ -226,7 +227,10 @@ public class JavaTasks {
      */
     static <T extends Comparable<T>> void mergeArrays(T[] first, T[] second) {
         /**
-         * Трудоёмкость программы T = O(N)
+         * Трудоёмкость программы T = O(N).
+         * Ресурсоёмкость программы R = O(1).
+         *
+         * Ресурсоёмкость программы не зависит от размера входных массивов.
          */
         int indexOne = 0;
         int indexTwo = first.length;
