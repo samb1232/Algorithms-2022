@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class JavaTasks {
@@ -78,12 +79,14 @@ public class JavaTasks {
      */
     static public void sortAddresses(String inputName, String outputName) throws IOException {
         /**
-         * Трудоёмкость программы T = O(N*log(N)).
-         * Ресурсоёмкость программы R = O(N).
-         * Сортировка деревом. В процессе программы составляется дерево из N элементов.
-         * Добавление элемента в дерево занимает O(log(N)).
+         * Трудоёмкость программы T = O(n*log(n)).  В худшем случае O(n^2).
+         * Ресурсоёмкость программы R = O(n).
+         *
+         * Сортировка деревом. В процессе программы составляется дерево из n элементов.
+         * Добавление элемента в дерево занимает O(log(n)). Это действие осуществляется для n элементов.
+         * Следовательно суммарная трудоёмость будет O(n*log(n)).
          * Так как дерево не балансируется, трудоёмкость добавления элемента в дерево в худшем случае будет достигать O(N),
-         * а трудоёмкость всей программы O(N^2).
+         * а трудоёмкость всей программы O(n^2).
          */
         try (BufferedReader inputFile = Files.newBufferedReader(Paths.get(inputName));
              BufferedWriter outputFile = Files.newBufferedWriter(Paths.get(outputName))) {
@@ -151,18 +154,20 @@ public class JavaTasks {
      */
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
         /**
-         * Трудоёмкость программы T = O(n^3*log(n))
-         * Ресурсоёмкость программы R = O(n)
+         * Трудоёмкость программы T = O(n*log(n)).
+         * Ресурсоёмкость программы R = O(n).
+         *
          * Программа составляет массив из чисел формата Double и сортирует его методом Collection.sort.
          * Трудоёмкость добавления всех температур в массив O(n).
          * Трудоёмкость сортировки массива методом Collection.sort (сортировка слиянием) O(n*log(n)).
          * Трудоёмкость вывода элементов в файл O(n).
-         * Общая трудоёмкость программы получается O(n^3*log(n)).
+         * Общая трудоёмкость программы получается O(n) + O(n*log(n)) + O(n), что можно округлить до O(n*log(n)),
+         * так как у O(n*log(n)) наибольшая степень из суммы.
          */
         try (BufferedReader inputFile = Files.newBufferedReader(Paths.get(inputName));
              BufferedWriter outputFile = Files.newBufferedWriter(Paths.get(outputName))) {
             String line = inputFile.readLine();
-            ArrayList<Double> list = new ArrayList();
+            List<Double> list = new ArrayList();
 
             while (line != null) {
                 list.add(Double.parseDouble(line));
