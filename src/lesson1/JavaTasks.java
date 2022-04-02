@@ -7,9 +7,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 @SuppressWarnings("unused")
 public class JavaTasks {
@@ -72,41 +72,59 @@ public class JavaTasks {
      * Людей, живущих в одном доме, выводить через запятую по алфавиту (вначале по фамилии, потом по имени). Пример:
      * <p>
      * Железнодорожная 3 - Петров Иван
+     * <p>
      * Железнодорожная 7 - Иванов Алексей, Иванов Михаил
+     * <p>
      * Садовая 5 - Сидоров Петр, Сидорова Мария
      * <p>
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
     static public void sortAddresses(String inputName, String outputName) throws IOException {
         /**
-         * Трудоёмкость программы T = O(n*log(n)).  В худшем случае O(n^2).
+         * Трудоёмкость программы T = O(n*log(n)).
          * Ресурсоёмкость программы R = O(n).
          *
-         * Сортировка деревом. В процессе программы составляется дерево из n элементов.
+         * Сортировка деревом (Красно-чёрное дерево TreeMap). В процессе программы составляется дерево из n элементов.
+         * Дерево TreeMap содержит адреса в качестве ключей и дерево TreeSet в качестве значения.
          * Добавление элемента в дерево занимает O(log(n)). Это действие осуществляется для n элементов.
          * Следовательно суммарная трудоёмость будет O(n*log(n)).
-         * Так как дерево не балансируется, трудоёмкость добавления элемента в дерево в худшем случае будет достигать O(N),
-         * а трудоёмкость всей программы O(n^2).
          */
         try (BufferedReader inputFile = Files.newBufferedReader(Paths.get(inputName));
              BufferedWriter outputFile = Files.newBufferedWriter(Paths.get(outputName))) {
             String line = inputFile.readLine();
-            AddressTree tree = new AddressTree();
+
+            TreeMap<String, TreeSet<String>> treeMap = new TreeMap<>((o1, o2) -> { // Comparator
+                String[] split1 = o1.split("\\s");
+                String[] split2 = o2.split("\\s");
+                if (split1[0].compareTo(split2[0]) == 0) {
+                    return Integer.parseInt(split1[1]) - Integer.parseInt(split2[1]);
+                }
+                return split1[0].compareTo(split2[0]);
+            });
+
             String[] splitted;
-            String[] address;
 
             while (line != null) {
-                if (!line.matches("[А-ЯЁ][а-яё]*\\s[А-ЯЁ][а-яё]*\\s-\\s([А-Я][А-яЁа-яё-]*\\s)+\\d+")) {
+                if (!line.matches("[А-ЯЁ][а-яё]*\\s[А-ЯЁ][а-яё]*\\s-\\s([А-Я][А-ЯЁа-яё-]*\\s)+\\d+")) {
                     throw new IllegalArgumentException("Wrong input: " + line);
                 }
                 splitted = line.split("\\s-\\s");
 
-                tree.addNode(splitted[0], splitted[1].split(" "));
+                if (!treeMap.containsKey(splitted[1])) {
+                    treeMap.put(splitted[1], new TreeSet<>(Collections.singleton(splitted[0])));
+                } else {
+                    treeMap.get(splitted[1]).add(splitted[0]);
+                }
 
                 line = inputFile.readLine();
             }
 
-            tree.sortAndPrint(outputFile);
+            for (String address : treeMap.keySet()) {
+                String guys = treeMap.get(address).toString();
+                guys = guys.substring(1, guys.length() - 1); // Обрезаем квадратные скобки
+                outputFile.write(address + " - " + guys);
+                outputFile.newLine();
+            }
         }
     }
 
@@ -154,36 +172,36 @@ public class JavaTasks {
      */
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
         /**
-         * Трудоёмкость программы T = O(n*log(n)).
-         * Ресурсоёмкость программы R = O(n).
+         * Трудоёмкость программы T = O(n).
+         * Ресурсоёмкость программы R = O(1). (не зависит от входных значений)
          *
-         * Программа составляет массив из чисел формата Double и сортирует его методом Collection.sort.
-         * Трудоёмкость добавления всех температур в массив O(n).
-         * Трудоёмкость сортировки массива методом Collection.sort (сортировка слиянием) O(n*log(n)).
-         * Трудоёмкость вывода элементов в файл O(n).
-         * Общая трудоёмкость программы получается O(n) + O(n*log(n)) + O(n), что можно округлить до O(n*log(n)),
-         * так как у O(n*log(n)) наибольшая степень из суммы.
+         * Сортировка подсчетом. Создаем массив длины диапазона [-273.0, 500.0] (всего 7731 ячеек),
+         * каждый элемент которого будет показывать, сколько исходных элементов равны данному.
+         * Читаем файл и считаем количество вхождений каждого числа.
+         *
          */
         try (BufferedReader inputFile = Files.newBufferedReader(Paths.get(inputName));
              BufferedWriter outputFile = Files.newBufferedWriter(Paths.get(outputName))) {
+            int[] list = new int[7731];
             String line = inputFile.readLine();
-            List<Double> list = new ArrayList();
 
             while (line != null) {
-                list.add(Double.parseDouble(line));
+                list[(int) (Double.parseDouble(line) * 10) + 2730] += 1;
                 line = inputFile.readLine();
             }
 
-            Collections.sort(list);
-
-            for (Double num: list) {
-                outputFile.write(num.toString());
-                outputFile.newLine();
+            for (int i = 0; i < list.length; i++) {
+                if (list[i] > 0) {
+                    for (int j = 0; j < list[i]; j++) {
+                        outputFile.write(Double.toString(((i - 2730) / 10.0)));
+                        outputFile.newLine();
+                    }
+                }
             }
         }
     }
 
-        /**
+    /**
      * Сортировка последовательности
      * <p>
      * Средняя

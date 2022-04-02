@@ -102,11 +102,11 @@ public class JavaAlgorithms {
     static public String longestCommonSubstring(String first, String second) {
         /**
          * Трудоёмкость программы T = O(N*M), где N - длина первой строки, M - длина второй строки.
-         * Ресурсоемкость программы R = O(K), K = min(M, N).
+         * Ресурсоемкость программы R = O(N), (или O(M), если M < N)
          *
          * В цикле N раз проходит внутренний цикл M раз.
          * Ресурсоёмкость программы зависит от размера максимальной подстроки.
-         * В худшем случае это будет O(K), где K - min(M, N). То есть минимум из first или second.
+         * В худшем случае это будет минимум из строк first или second.
          */
         int count;
         String maxSubstring = "";
