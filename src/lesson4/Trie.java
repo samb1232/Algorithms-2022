@@ -106,7 +106,13 @@ public class Trie extends AbstractSet<String> implements Set<String> {
         }
 
         private void feelStack(Node node, String word) {
-//            Рекурсивно добавляем в стек все слова
+            /**
+             * Трудоёмкость алгоритма T = O(n)
+             * Ресурсоёмкость алгоритма R = O(n)
+             * Рекурсивно добавляем в стек все слова
+             */
+
+
             for (char character : node.children.keySet()) {
                 if (character != (char) 0) feelStack(node.children.get(character), word + character);
                 else stack.push(word);
