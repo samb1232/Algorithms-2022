@@ -38,7 +38,7 @@ class TrieTest : AbstractTrieTest() {
             trieIterator.next()
             trieIterator.remove()
         }
-        assertEquals(1, trie.size, "Not all elements are deleted")
+        assertEquals(0, trie.size, "Not all elements are deleted")
     }
 
 }
